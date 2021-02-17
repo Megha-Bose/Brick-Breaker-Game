@@ -5,16 +5,28 @@ from objects import *
 class Brick(Object):
     # Class for bricks 
     def __init__(self, x, y):
-        strength_list = [1, 2, 3, 100]
+        strength_list = [1, 2, 3, 'X']
         self.__value = random.choice(strength_list)
+        self.__gone = 0
         self.__body = [['_', '_', '_', '_', self.__value, '_', '_', '_', '_']]
         Object.__init__(self, x, y)
 
     def get_value(self):
-        return self.__value
+        val = self.__value
+        return val
+    
+    def set_value(self, val):
+        self.__value = val
+
+    def get_gone(self):
+        val = self.__gone
+        return val
+
+    def set_gone(self, val):
+        self.__gone = val
 
     def dec_value(self):
-        self.__value = self.__value - 1
+        self.set_value(self.get_value() - 1)
 
     def clear(self, grid, x, y):
         for i in range(x, x + 9):
@@ -30,11 +42,7 @@ class Brick(Object):
                 grid[y][i] = str(Fore.BLACK + Back.BLUE + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
             elif self.__value == 3:
                 grid[y][i] = str(Fore.BLACK + Back.GREEN + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
-            else:
+            elif self.__value == 'X':
                 grid[y][i] = str(Fore.BLACK + Back.RED + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
-
-    def check_over(self):
-        if self.__value <= 0:
-            return 1
-        else:
-            return 0
+            # else:
+            #     grid[y][i] = self.__value

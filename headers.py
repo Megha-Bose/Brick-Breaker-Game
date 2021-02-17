@@ -1,24 +1,21 @@
-import time
+import time, os, sys
 import numpy as np
 import signal
 import random
-import os
-import sys
 from alarmexception import AlarmException
 from getch import _getChUnix as getChar
 from colorama import init, Fore, Back, Style
 init()
 
-HEIGHT=50
-WIDTH=114
-PADDLE_LEN = 12
+HEIGHT=40
+WIDTH=90
+PADDLE_LEN = 3
 INPUT_CHAR=''
 LIVES = 10
 BRICKS = 36
-SCORE = 0
+SCORE = [0]
 GAMETIME = 100
-LEFT_MARGIN = 10
-NUM_BALLS = 1
+LEFT_MARGIN = 5
 BALL_SPEED = 1
 
 MULTI_BALL = 2
@@ -29,6 +26,8 @@ BALL_X_FLAG = 0
 FAST_BALL_FLAG = 0
 THRU_BALL_FLAG = 0
 SCREEN = 200
+
+NUM_BALLS = [1]
 
 def reposition_cursor(x, y):
     print("\033[%d;%dH" % (x, y))

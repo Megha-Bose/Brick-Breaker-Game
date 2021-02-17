@@ -34,25 +34,23 @@ def print_header(newtime):
 brick_obj_array = [Brick(0, 0) for i in range(36)]
     
 def place_bricks():
-    col_start = LEFT_MARGIN + 30
-    row_start = HEIGHT - 40
+    col_start = LEFT_MARGIN + 20
+    row_start = HEIGHT - 30
     ind = 0
     for colseg in range(0, 3):
         for row in range(row_start, row_start + 6):
-            if brick_obj_array[ind].get_value() > 0:
-                brick_obj_array[ind].show(board_obj.grid, row, col_start)
+            brick_obj_array[ind].show(board_obj.grid, row, col_start)
             ind += 1
         if colseg != 2:
             row_start += 1
-            col_start = col_start + 9
+            col_start += 9
 
     for colseg in range(3, 6):
         for row in range(row_start, row_start + 6):
-            if brick_obj_array[ind].get_value() > 0:
-                brick_obj_array[ind].show(board_obj.grid, row, col_start)
+            brick_obj_array[ind].show(board_obj.grid, row, col_start)
             ind += 1
         row_start -= 1
-        col_start = col_start + 9
+        col_start += 9
 
 # Moves the paddle
 def move_paddle():
@@ -76,14 +74,18 @@ def move_paddle():
 
     if char == 'a':
         paddle_obj.clear(board_obj.grid)
-        paddle_obj.setxl(paddle_obj.getxl() - 1)
-        paddle_obj.setxr(paddle_obj.getxr() - 1)
+        if paddle_obj.getxl() - 1 >= LEFT_MARGIN:
+            paddle_obj.setxl(paddle_obj.getxl() - 1)
+        if paddle_obj.getxl() - 1 >= LEFT_MARGIN:
+            paddle_obj.setxr(paddle_obj.getxr() - 1)
         paddle_obj.show(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
 
     if char == 'd':
         paddle_obj.clear(board_obj.grid)
-        paddle_obj.setxl(paddle_obj.getxl() + 1)
-        paddle_obj.setxr(paddle_obj.getxr() + 1)
+        if paddle_obj.getxl() + 1 <= WIDTH - 1:
+            paddle_obj.setxl(paddle_obj.getxl() + 1)
+        if paddle_obj.getxl() + 1 <= WIDTH - 1:
+            paddle_obj.setxr(paddle_obj.getxr() + 1)
         paddle_obj.show(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
 
 
@@ -91,11 +93,6 @@ def move_paddle():
 ball_obj_array = [Ball(0, 0)]
 
 def place_ball(ind):
-    plen = PADDLE_LEN
-    if EXP_PAD_FLAG:
-        plen = PADDLE_LEN + 4
-    if SHR_PAD_FLAG:
-        plen = PADDLE_LEN - 4
     ball_obj_array[ind].start_pos(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
     x = ball_obj_array[ind].getx()
     y = ball_obj_array[ind].gety()
@@ -105,9 +102,10 @@ def move_balls():
     for ball in ball_obj_array:
         if GRAB_FLAG != 1 or ball.gety() != HEIGHT - 4:
             if ball.has_fallen(board_obj.grid):
-                ball.clear()
-                if NUM_BALLS == 0:
-                    ball.start_pos(paddle_obj.getx(), plen)
+                ball.clear(board_obj.grid)
+                if NUM_BALLS[0] == 0:
+                    ball.start_pos(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
+                    NUM_BALLS[0] += 1
             else:
                 nextx = ball.getx() + BALL_SPEED * ball.dirx
                 nexty = ball.gety() + BALL_SPEED * ball.diry
@@ -116,13 +114,18 @@ def move_balls():
                 ball.handle_ball_wall_collision(nextx, nexty)
                 
                 for brick in brick_obj_array:
-                    brickx = brick.getx()
-                    if ball.handle_ball_brick_collision(brickx, nextx, nexty):
-                        if brick.get_value() != 100 or THRU_BALL_FLAG == 1:
-                            brick.dec_value() 
-                            if brick.get_value() == 0:
-                                xx = brick.getx()
-                                yy = brick.gety()
-                                brick.clear(board_obj.grid, xx, yy)
+                    if brick.get_gone() == 0:
+                        brickx = brick.getx()
+                        bricky = brick.gety()
+                        
+                        if ball.handle_ball_brick_collision(brickx, bricky, nextx, nexty) == 1:
+                            if brick.get_value() != 'X':
+                                brick.dec_value() 
+                                if brick.get_value() == 0:
+                                    xx = brick.getx()
+                                    yy = brick.gety()
+                                    brick.clear(board_obj.grid, xx, yy)
+                                    brick.set_gone(1)
                 
                 ball.move(board_obj.grid)
+    return NUM_BALLS

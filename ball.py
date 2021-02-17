@@ -1,5 +1,6 @@
 from headers import *
 from objects import *
+from utilities import *
 
 class Ball(Object):
     # Inherits Object class
@@ -27,7 +28,7 @@ class Ball(Object):
     def has_fallen(self, grid):
         y = self.gety()
         if y > HEIGHT - 4:
-            NUM_BALLS -= 1
+            NUM_BALLS[0] -= 1
             return 1
         return 0
     
@@ -76,15 +77,16 @@ class Ball(Object):
         return 0
 
     # Handling ball-brick collision
-    def handle_ball_brick_collision(self, brickx, nextx, nexty):
-        if nextx == brickx or nextx == brickx + 9:
+    def handle_ball_brick_collision(self, brickx, bricky, nextx, nexty):
+        if (nextx == brickx or nextx == brickx + 9) and nexty == bricky:
             self.dirx = -self.dirx
             self.diry = -self.diry
             return 1
-        elif nextx > brickx or nextx < brickx + 9:
+        elif nextx > brickx and nextx < brickx + 9 and nexty == bricky:
             self.diry = -self.diry
             return 1
-        return 0
+        else:
+            return 0
 
         
 
