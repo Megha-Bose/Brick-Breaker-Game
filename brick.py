@@ -8,7 +8,7 @@ class Brick(Object):
         strength_list = [1, 2, 3, 'X']
         self.__value = random.choice(strength_list)
         self.__gone = 0
-        self.__body = [['_', '_', '_', '_', self.__value, '_', '_', '_', '_']]
+        self.__body = [['_', '_', '_', '_', '_', '_', '_', '_', '_']]
         Object.__init__(self, x, y)
 
     def get_value(self):
@@ -44,5 +44,3 @@ class Brick(Object):
                 grid[y][i] = str(Fore.BLACK + Back.GREEN + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
             elif self.__value == 'X':
                 grid[y][i] = str(Fore.BLACK + Back.RED + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
-            # else:
-            #     grid[y][i] = self.__value

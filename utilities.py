@@ -6,7 +6,6 @@ from paddle import Paddle
 from brick import Brick
 from ball import Ball
 from background import Background
-# from objects import *
 
 # The board
 board_obj = Board(HEIGHT, WIDTH)
@@ -104,9 +103,31 @@ def move_balls():
             if ball.has_fallen(board_obj.grid):
                 ball.clear(board_obj.grid)
                 if NUM_BALLS[0] == 0:
+                    LIVES[0] -= 1
                     ball.start_pos(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
                     NUM_BALLS[0] += 1
             else:
+                ballx = ball.getx()
+                bally = ball.gety()
+
+                ball.handle_ball_paddle_collision(paddle_obj.getxl(), paddle_obj.getxr(), ballx, bally)
+                ball.handle_ball_wall_collision(ballx, bally)
+                
+                for brick in brick_obj_array:
+                    if brick.get_gone() == 0:
+                        brickx = brick.getx()
+                        bricky = brick.gety()
+                        
+                        if ball.handle_ball_brick_collision(brickx, bricky, ballx, bally) == 1:
+                            if brick.get_value() != 'X':
+                                brick.dec_value() 
+                                if brick.get_value() == 0:
+                                    SCORE[0] += 1
+                                    xx = brick.getx()
+                                    yy = brick.gety()
+                                    brick.clear(board_obj.grid, xx, yy)
+                                    brick.set_gone(1)
+
                 nextx = ball.getx() + BALL_SPEED * ball.dirx
                 nexty = ball.gety() + BALL_SPEED * ball.diry
 

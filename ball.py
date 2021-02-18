@@ -5,10 +5,9 @@ from utilities import *
 class Ball(Object):
     # Inherits Object class
     def __init__(self, x, y):
-        self.dirx = 0
+        self.dirx = -1
         self.diry = -1
-        self.__body = np.array([["O"]])
-        self.__body_grab = np.array([["0"]])
+        self.__body = np.array([["0"]])
         Object.__init__(self, x, y)
 
     def dec_lives(self):
