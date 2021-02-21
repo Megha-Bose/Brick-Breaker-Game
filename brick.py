@@ -57,9 +57,9 @@ class Brick(Object):
                     grid[y][i] = str(Fore.BLACK + Back.RED + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
                 else:
                     grid[y][i] = str(Fore.BLACK + Back.RED + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
-            elif val == '*':
+            elif val == '*' and self.get_gone() == 0:
                 if i == x + 4:
-                    grid[y][i] = str(Fore.BLACK + Back.YELLOW + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
+                    grid[y][i] = str(Fore.WHITE + Back.YELLOW + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
                 else:
                     grid[y][i] = str(Fore.BLACK + Back.YELLOW + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
             else: 

@@ -36,16 +36,16 @@ def print_header(newtime):
 brick_obj_array = [Brick(0, 0) for i in range(36)]
 
 PLACED = [0]
+explode_list = [7, 8, 12, 13, 18, 19, 25, 26]
+tot_expbreak_list = [1, 2, 3, 4, 6, 9, 14, 20, 24, 27, 31, 32, 33, 34]
     
 def place_bricks():
     col_start = LEFT_MARGIN + 17
     row_start = HEIGHT - 30
     ind = 0
-    explode_list = [7, 8, 12, 13, 18, 19, 25, 26]
-    tot_unbreak_list = [1, 2, 3, 4, 6, 9, 14, 20, 24, 27, 31, 32, 33, 34]
     unbreak_list = []
     if PLACED[0] == 0:
-        unbreak_list = random.sample(tot_unbreak_list, 6)
+        unbreak_list = random.sample(tot_expbreak_list, 6)
         PLACED[0] = 1
     for colseg in range(0, 3):
         for row in range(row_start, row_start + 6):
@@ -93,23 +93,19 @@ def move_paddle():
 
     if char == 'a':
         paddle_obj.clear(board_obj.grid)
-        if paddle_obj.getxl() - 1 >= LEFT_MARGIN:
+        if paddle_obj.getxl() - 1 >= LEFT_MARGIN and paddle_obj.getxr() - 1 >= LEFT_MARGIN + PADDLE_LEN:
             paddle_obj.setxl(paddle_obj.getxl() - 1)
             if START[0] == 0:
                 ball_obj_array[0].show(board_obj.grid, ball_obj_array[0].getx() - 1, ball_obj_array[0].gety())
-                
-        if paddle_obj.getxr() - 1 >= LEFT_MARGIN + PADDLE_LEN:
             paddle_obj.setxr(paddle_obj.getxr() - 1)
         paddle_obj.show(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
 
     if char == 'd':
         paddle_obj.clear(board_obj.grid)
-        if paddle_obj.getxr() + 1 <= WIDTH - 1:
+        if paddle_obj.getxr() + 1 <= WIDTH - 1 and paddle_obj.getxl() + 1 <= WIDTH - 1 - PADDLE_LEN:
             paddle_obj.setxl(paddle_obj.getxl() + 1)
             if START[0] == 0:
                 ball_obj_array[0].show(board_obj.grid, ball_obj_array[0].getx() + 1, ball_obj_array[0].gety())
-                
-        if paddle_obj.getxl() + 1 <= WIDTH - 1 - PADDLE_LEN:
             paddle_obj.setxr(paddle_obj.getxr() + 1)
         paddle_obj.show(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
 
@@ -170,7 +166,7 @@ def move_balls():
                         bricky = brick.gety()
                         
                         if ball.handle_ball_brick_collision(brickx, bricky, ballx, bally) == 1:
-                            if brick.get_value() != 'X':
+                            if brick.get_value() != 'X' and brick.get_value() != '*':
                                 brick.dec_value() 
                                 if brick.get_value() == 0:
                                     SCORE[0] += 1
@@ -178,6 +174,18 @@ def move_balls():
                                     yy = brick.gety()
                                     brick.clear(board_obj.grid, xx, yy)
                                     brick.set_gone(1)
+                                    brick.set_value(0)
+                            if brick.get_value() == '*':
+                                expbreak_list = tot_expbreak_list + explode_list
+                                for br in expbreak_list:
+                                    if brick_obj_array[br].get_gone() == 0:
+                                        brick_obj_array[br].set_value(0) 
+                                        SCORE[0] += 1
+                                        xx = brick_obj_array[br].getx()
+                                        yy = brick_obj_array[br].gety()
+                                        brick_obj_array[br].clear(board_obj.grid, xx, yy)
+                                        brick_obj_array[br].set_gone(1)
+                                        brick_obj_array[br].set_value(0)
 
                 nextx = ball.getx() + BALL_SPEED * ball.dirx
                 nexty = ball.gety() + BALL_SPEED * ball.diry
@@ -191,7 +199,7 @@ def move_balls():
                         bricky = brick.gety()
                         
                         if ball.handle_ball_brick_collision(brickx, bricky, nextx, nexty) == 1:
-                            if brick.get_value() != 'X':
+                            if brick.get_value() != 'X' and brick.get_value() != '*':
                                 brick.dec_value() 
                                 if brick.get_value() == 0:
                                     SCORE[0] += 1
@@ -199,6 +207,19 @@ def move_balls():
                                     yy = brick.gety()
                                     brick.clear(board_obj.grid, xx, yy)
                                     brick.set_gone(1)
+                                    brick.set_value(0)
+                            if brick.get_value() == '*':
+                                expbreak_list = tot_expbreak_list + explode_list
+                                for br in expbreak_list:
+                                    if brick_obj_array[br].get_gone() == 0:
+                                        brick_obj_array[br].set_value(0) 
+                                        SCORE[0] += 1
+                                        xx = brick_obj_array[br].getx()
+                                        yy = brick_obj_array[br].gety()
+                                        brick_obj_array[br].clear(board_obj.grid, xx, yy)
+                                        brick_obj_array[br].set_gone(1)
+                                        brick_obj_array[br].set_value(0)
+                                
                 
                 ball.move(board_obj.grid)
     return NUM_BALLS

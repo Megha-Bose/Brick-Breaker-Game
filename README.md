@@ -4,8 +4,8 @@
 - Ball
 - Bricks:
     - Level bricks : Bricks of value 1,2,3 whose value reduce by 1 on hitting and vanish on becoming 0
-    - Unbreakable bricks : Can't be broken by ball hits
-    - Exploding bricks : Hitting these break bricks adjacent to them (diagonally, vertically, horizontally) irrespective of the value or kind.
+    - Unbreakable bricks `X`: Can't be broken by ball hits
+    - Exploding bricks `*` : Hitting these break bricks adjacent to them (diagonally, vertically, horizontally) irrespective of the value or kind.
 - Paddle
 
 ## Run
