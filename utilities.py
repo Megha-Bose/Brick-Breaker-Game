@@ -21,6 +21,9 @@ bg_obj.display_right_wall(board_obj.grid)
 paddle_obj = Paddle(0, 0)
 paddle_obj.show(board_obj.grid, int(WIDTH / 2), int(WIDTH / 2) + PADDLE_LEN)
 
+# Moving balls
+ball_obj_array = [Ball(0, 0)]
+
 def print_header(newtime):
     print(Fore.WHITE + Back.BLACK_EX + Style.BRIGHT + "               ".center(SCREEN) + Style.RESET_ALL)
     print(Fore.WHITE + Back.BLACK_EX + Style.BRIGHT + "THE BRICK BREAKER".center(SCREEN) + Style.RESET_ALL)
@@ -31,21 +34,38 @@ def print_header(newtime):
 
 # Placing bricks
 brick_obj_array = [Brick(0, 0) for i in range(36)]
+
+PLACED = [0]
     
 def place_bricks():
-    col_start = LEFT_MARGIN + 20
+    col_start = LEFT_MARGIN + 17
     row_start = HEIGHT - 30
     ind = 0
+    explode_list = [7, 8, 12, 13, 18, 19, 25, 26]
+    tot_unbreak_list = [1, 2, 3, 4, 6, 9, 14, 20, 24, 27, 31, 32, 33, 34]
+    unbreak_list = []
+    if PLACED[0] == 0:
+        unbreak_list = random.sample(tot_unbreak_list, 6)
+        PLACED[0] = 1
     for colseg in range(0, 3):
         for row in range(row_start, row_start + 6):
+            if ind in explode_list:
+                brick_obj_array[ind].set_value('*')
+            if ind in unbreak_list:
+                brick_obj_array[ind].set_value('X')
             brick_obj_array[ind].show(board_obj.grid, row, col_start)
             ind += 1
+        col_start += 9
         if colseg != 2:
             row_start += 1
-            col_start += 9
+            
 
     for colseg in range(3, 6):
         for row in range(row_start, row_start + 6):
+            if ind in explode_list:
+                brick_obj_array[ind].set_value('*')
+            if ind in unbreak_list:
+                brick_obj_array[ind].set_value('X')
             brick_obj_array[ind].show(board_obj.grid, row, col_start)
             ind += 1
         row_start -= 1
@@ -75,21 +95,29 @@ def move_paddle():
         paddle_obj.clear(board_obj.grid)
         if paddle_obj.getxl() - 1 >= LEFT_MARGIN:
             paddle_obj.setxl(paddle_obj.getxl() - 1)
-        if paddle_obj.getxl() - 1 >= LEFT_MARGIN:
+            if START[0] == 0:
+                ball_obj_array[0].show(board_obj.grid, ball_obj_array[0].getx() - 1, ball_obj_array[0].gety())
+                
+        if paddle_obj.getxr() - 1 >= LEFT_MARGIN + PADDLE_LEN:
             paddle_obj.setxr(paddle_obj.getxr() - 1)
         paddle_obj.show(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
 
     if char == 'd':
         paddle_obj.clear(board_obj.grid)
-        if paddle_obj.getxl() + 1 <= WIDTH - 1:
+        if paddle_obj.getxr() + 1 <= WIDTH - 1:
             paddle_obj.setxl(paddle_obj.getxl() + 1)
-        if paddle_obj.getxl() + 1 <= WIDTH - 1:
+            if START[0] == 0:
+                ball_obj_array[0].show(board_obj.grid, ball_obj_array[0].getx() + 1, ball_obj_array[0].gety())
+                
+        if paddle_obj.getxl() + 1 <= WIDTH - 1 - PADDLE_LEN:
             paddle_obj.setxr(paddle_obj.getxr() + 1)
         paddle_obj.show(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
 
+    if char == 'q':
+        quit()
 
-# Moving balls
-ball_obj_array = [Ball(0, 0)]
+
+# Ball functions
 
 def place_ball(ind):
     ball_obj_array[ind].start_pos(board_obj.grid, paddle_obj.getxl(), paddle_obj.getxr())
@@ -97,9 +125,32 @@ def place_ball(ind):
     y = ball_obj_array[ind].gety()
     ball_obj_array[ind].show(board_obj.grid, x, y)
 
+def shoot_ball():
+    def alarmhandler(signum, frame):
+        raise AlarmException
+
+    def user_input(timeout = 0.1):
+        signal.signal(signal.SIGALRM, alarmhandler)
+        signal.setitimer(signal.ITIMER_REAL, timeout)
+        try:
+            text = getChar()()
+            signal.alarm(0)
+            return text
+        except AlarmException:
+            pass
+        signal.signal(signal.SIGALRM, signal.SIG_IGN)
+        return ''
+    
+    INPUT_CHAR = user_input()
+    char = INPUT_CHAR
+
+    if char == 'w':
+        GRAB_FLAG[0] = 0
+        START[0] = 1
+
 def move_balls():
     for ball in ball_obj_array:
-        if GRAB_FLAG != 1 or ball.gety() != HEIGHT - 4:
+        if GRAB_FLAG[0] != 1 or ball.gety() != HEIGHT - 4:
             if ball.has_fallen(board_obj.grid):
                 ball.clear(board_obj.grid)
                 if NUM_BALLS[0] == 0:
@@ -143,6 +194,7 @@ def move_balls():
                             if brick.get_value() != 'X':
                                 brick.dec_value() 
                                 if brick.get_value() == 0:
+                                    SCORE[0] += 1
                                     xx = brick.getx()
                                     yy = brick.gety()
                                     brick.clear(board_obj.grid, xx, yy)

@@ -38,7 +38,9 @@ while True:
     place_bricks()
     board_obj.print_board()
     move_paddle()
+    shoot_ball()
     move_balls()
+    # update_power_ups()
 
     signal.signal(signal.SIGINT, handler)
     

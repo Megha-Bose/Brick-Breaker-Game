@@ -5,18 +5,18 @@ from objects import *
 class Brick(Object):
     # Class for bricks 
     def __init__(self, x, y):
-        strength_list = [1, 2, 3, 'X']
-        self.__value = random.choice(strength_list)
+        strength_list = [1, 2, 3]
+        self.__value = [random.choice(strength_list)]
         self.__gone = 0
-        self.__body = [['_', '_', '_', '_', '_', '_', '_', '_', '_']]
+        self.__body = [['_', '_', '_', '_', self.__value[0], '_', '_', '_', '_']]
         Object.__init__(self, x, y)
 
     def get_value(self):
-        val = self.__value
+        val = self.__value[0]
         return val
     
     def set_value(self, val):
-        self.__value = val
+        self.__value[0] = val
 
     def get_gone(self):
         val = self.__gone
@@ -36,11 +36,32 @@ class Brick(Object):
         self.setx(x)
         self.sety(y)
         for i in range(x, x + 9):
-            if self.__value == 1:
-                grid[y][i] = str(Fore.BLACK + Back.YELLOW + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
-            elif self.__value == 2:
-                grid[y][i] = str(Fore.BLACK + Back.BLUE + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
-            elif self.__value == 3:
-                grid[y][i] = str(Fore.BLACK + Back.GREEN + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
-            elif self.__value == 'X':
-                grid[y][i] = str(Fore.BLACK + Back.RED + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
+            val = self.get_value()
+            if val == 1:
+                if i == x + 4:
+                    grid[y][i] = str(Fore.BLACK + Back.WHITE + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
+                else:
+                    grid[y][i] = str(Fore.BLACK + Back.WHITE + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
+            elif val == 2:
+                if i == x + 4:
+                    grid[y][i] = str(Fore.BLACK + Back.BLUE + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
+                else:
+                    grid[y][i] = str(Fore.BLACK + Back.BLUE + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
+            elif val == 3:
+                if i == x + 4:
+                    grid[y][i] = str(Fore.BLACK + Back.GREEN + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
+                else:
+                    grid[y][i] = str(Fore.BLACK + Back.GREEN + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
+            elif val == 'X':
+                if i == x + 4:
+                    grid[y][i] = str(Fore.BLACK + Back.RED + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
+                else:
+                    grid[y][i] = str(Fore.BLACK + Back.RED + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
+            elif val == '*':
+                if i == x + 4:
+                    grid[y][i] = str(Fore.BLACK + Back.YELLOW + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
+                else:
+                    grid[y][i] = str(Fore.BLACK + Back.YELLOW + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
+            else: 
+                grid[y][i] = ' '
+

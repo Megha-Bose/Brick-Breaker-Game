@@ -59,34 +59,31 @@ class Ball(Object):
         self.show(grid, nextx, nexty)
 
     # Handling ball-paddle collision
-    def handle_ball_paddle_collision(self, padxl, padxr, nextx, nexty):
-        if nextx >= padxl and nextx <= padxr and nexty == HEIGHT - 3:
+    def handle_ball_paddle_collision(self, padxl, padxr, x, y):
+        if x >= padxl and x <= padxr and y == HEIGHT - 3:
             self.diry = -self.diry
             return 1
         return 0
 
     # Handling ball-wall collision
-    def handle_ball_wall_collision(self, nextx, nexty):
-        if nextx == LEFT_MARGIN or nextx == WIDTH - 1:
+    def handle_ball_wall_collision(self, x, y):
+        if x == LEFT_MARGIN or x == WIDTH - 1:
             self.dirx = -self.dirx
             return 1
-        if nexty == 0:
+        if y == 0:
             self.diry = -self.diry
             return 1
         return 0
 
     # Handling ball-brick collision
-    def handle_ball_brick_collision(self, brickx, bricky, nextx, nexty):
-        if (nextx == brickx or nextx == brickx + 9) and nexty == bricky:
+    def handle_ball_brick_collision(self, brickx, bricky, x, y):
+        if (x == brickx or x == brickx + 9) and y == bricky:
             self.dirx = -self.dirx
             self.diry = -self.diry
             return 1
-        elif nextx > brickx and nextx < brickx + 9 and nexty == bricky:
+        elif x > brickx and x < brickx + 9 and y == bricky:
             self.diry = -self.diry
             return 1
         else:
             return 0
 
-        
-
-        
