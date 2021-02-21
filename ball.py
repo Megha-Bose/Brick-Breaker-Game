@@ -61,7 +61,12 @@ class Ball(Object):
     # Handling ball-paddle collision
     def handle_ball_paddle_collision(self, padxl, padxr, x, y):
         if x >= padxl and x <= padxr and y == HEIGHT - 3:
-            self.diry = -self.diry
+            if (x >= padxl and x <= padxl + 2) and (self.dirx == 0):
+                self.dirx = -1
+            if (x >= padxr - 2 and x <= padxr) and (self.dirx == 0):
+                self.dirx = 1
+            else:
+                self.diry = -self.diry
             return 1
         return 0
 

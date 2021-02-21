@@ -62,6 +62,4 @@ class Brick(Object):
                     grid[y][i] = str(Fore.WHITE + Back.YELLOW + Style.BRIGHT + str(self.get_value()) + Style.RESET_ALL)
                 else:
                     grid[y][i] = str(Fore.BLACK + Back.YELLOW + Style.BRIGHT + str(self.__body[0][i - x]) + Style.RESET_ALL)
-            else: 
-                grid[y][i] = ' '
 
