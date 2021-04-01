@@ -11,24 +11,40 @@ HEIGHT=40
 WIDTH=90
 PADDLE_LEN = 10
 INPUT_CHAR=''
-LIVES = [10]
-BRICKS = 36
+LIVES = [20]
+LEVEL = [1]
 SCORE = [0]
 START = [0]
+START_LVL = [0]
+FALL_TIME = [4]
+SHIFT = [0]
 GAMETIME = 100
-LEFT_MARGIN = 5
+LEFT_MARGIN = 10
 BALL_SPEED = 1
+PLACED = [0]
 
 MULTI_BALL = 2
 GRAB_FLAG = [1]
+SHOOT_FLAG = [0]
+END_SHOOT = [0]
 EXP_PAD_FLAG = 0
 SHR_PAD_FLAG = 0
 BALL_X_FLAG = 0
 FAST_BALL_FLAG = 0
 THRU_BALL_FLAG = 0
 SCREEN = 100
+RAINBOW_FLAG = [1, 1]
+
+L1_ENTER = [0]
+L2_ENTER = [0]
+L3_ENTER = [0]
+L4_ENTER = [0]
 
 NUM_BALLS = [1]
+POWERUP_LIFE = [6]
+POWERUP_SPEED = [1]
+BOMB_SPEED = [1]
+ENEMY_HEALTH = [5]
 
 def reposition_cursor(x, y):
     print("\033[%d;%dH" % (x, y))
@@ -42,6 +58,7 @@ THRU_BALL = Fore.LIGHTCYAN_EX + "$" + Fore.RESET
 GRAB = Fore.LIGHTWHITE_EX + "&" + Fore.RESET
 
 def win():
+    os.system('aplay -q ./sounds/sound_win.wav&')
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ " __     __                                      ___".center(SCREEN))
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ " \ \   / /                                      | |".center(SCREEN))
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "  \ \_/ /_  __  __    _  ___  _  ____  _ ___    | |".center(SCREEN))
@@ -50,9 +67,22 @@ def win():
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "    |_|\___/\_____/   \__,__,__/\____/|_|  |_|  (_)".center(SCREEN)+Style.RESET_ALL)
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "                                                   ".center(SCREEN)+Style.RESET_ALL)
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "                                                   ".center(SCREEN)+Style.RESET_ALL)
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "                                                   ".center(SCREEN)+Style.RESET_ALL)   
+
+def escape():
+    os.system('aplay -q ./sounds/sound_game_over.wav&')
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ " __     __                            _    _    ___".center(SCREEN))
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ " \ \   / /                           |_| _| |_  | |".center(SCREEN))
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "  \ \_/ /_  __  __    _____   _  ___  _ /_   _\ | |".center(SCREEN))
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "   \   / _ \| | | |  |  _  | | | | | | |  | |   | |".center(SCREEN))
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "    | | (_| | |_| |  | |_| | | |_| | | |  | |   |_|".center(SCREEN))
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "    |_|\___/\_____/   \__, ,  \___/  |_|  |_|   (_)".center(SCREEN)+Style.RESET_ALL)
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "                         | |                       ".center(SCREEN)+Style.RESET_ALL)
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "                         |_|                       ".center(SCREEN)+Style.RESET_ALL)
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "                                                   ".center(SCREEN)+Style.RESET_ALL)      
 
 def game_over():
+    os.system('aplay -q ./sounds/sound_game_over.wav&')
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "                                                      ".center(SCREEN))                 
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ "  _____                          ____                 ".center(SCREEN))                 
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT+ " / ____|                        / __ \                ".center(SCREEN))              

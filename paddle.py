@@ -42,4 +42,10 @@ class Paddle(Object):
         self.setxl(xl)
         self.setxr(xr)
         for j in range(xl, xr + 1):
-            grid[HEIGHT-3][j] = str(Fore.BLACK + Back.WHITE + Style.BRIGHT + ' ' + Style.RESET_ALL)
+            if SHOOT_FLAG[0] == 1:
+                if j == xl or j == xr:
+                    grid[HEIGHT-3][j] = str(Fore.BLACK + Back.BLACK + Style.BRIGHT + '^' + Style.RESET_ALL)
+                else:
+                    grid[HEIGHT-3][j] = str(Fore.BLACK + Back.WHITE + Style.BRIGHT + '^' + Style.RESET_ALL)
+            else:
+                grid[HEIGHT-3][j] = str(Fore.BLACK + Back.WHITE + Style.BRIGHT + ' ' + Style.RESET_ALL)

@@ -11,6 +11,12 @@ class Brick(Object):
         self.__body = [['_', '_', '_', '_', self.__value[0], '_', '_', '_', '_']]
         Object.__init__(self, x, y)
 
+    def reset(self, grid, x, y):
+        strength_list = [1, 2, 3]
+        self.__value = [random.choice(strength_list)]
+        self.__gone = 0
+        self.__body = [['_', '_', '_', '_', self.__value[0], '_', '_', '_', '_']]
+
     def get_value(self):
         val = self.__value[0]
         return val

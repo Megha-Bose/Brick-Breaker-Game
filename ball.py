@@ -1,14 +1,28 @@
 from headers import *
 from objects import *
 from utilities import *
+from os import *
 
 class Ball(Object):
     # Inherits Object class
     def __init__(self, x, y):
         self.dirx = -1
         self.diry = -1
+        self.active = 0
         self.__body = np.array([["0"]])
         Object.__init__(self, x, y)
+
+    def get_status(self):
+        return self.active
+    
+    def set_status(self, status):
+        self.active = status
+    
+    def set_dirx(self, dirx):
+        self.dirx = dirx
+    
+    def set_diry(self, diry):
+        self.diry = diry
 
     def dec_lives(self):
         LIVES -= 1
@@ -16,6 +30,12 @@ class Ball(Object):
     def inc_score(self, val):
         SCORE += val
     
+    # For bullet start
+    def start_shoot(self, grid, x, y):
+        self.setx(x)
+        self.sety(y)
+        grid[y][x] = self.__body[0][0]
+
     # Function to place the ball randomly on the paddle at each start
     def start_pos(self, grid, paddle_xl, paddle_xr):
         xpos = random.randrange(paddle_xl, paddle_xr + 1)
@@ -28,10 +48,11 @@ class Ball(Object):
         y = self.gety()
         if y > HEIGHT - 4:
             NUM_BALLS[0] -= 1
+            os.system('aplay -q ./sounds/sound_lose_life.wav&')
             return 1
         return 0
     
-    # Check if ball in on paddle 
+    # Check if ball is on paddle 
     def on_paddle(self, grid, paddle_xl, paddle_xr):
         ball_x = self.getx()
         if ball_x >= paddle_xl and ball_x <= paddle_xr and ball_y == HEIGHT - 4:
@@ -61,6 +82,7 @@ class Ball(Object):
     # Handling ball-paddle collision
     def handle_ball_paddle_collision(self, padxl, padxr, x, y):
         if x >= padxl and x <= padxr and y == HEIGHT - 3:
+            SHIFT[0] += 1
             if (x >= padxl and x <= padxl + 2) and (self.dirx == 0):
                 self.dirx = -1
             if (x >= padxr - 2 and x <= padxr) and (self.dirx == 0):
@@ -91,4 +113,16 @@ class Ball(Object):
             return 1
         else:
             return 0
+    
+    # Handling ball-enemy collision
+    def handle_ball_enemy_collision(self, padxl, padxr, x, y):
+        if x >= padxl and x <= padxr and y == 3:
+            if (x >= padxl and x <= padxl + 2) and (self.dirx == 0):
+                self.dirx = -1
+            if (x >= padxr - 2 and x <= padxr) and (self.dirx == 0):
+                self.dirx = 1
+            else:
+                self.diry = -self.diry
+            return 1
+        return 0
 
