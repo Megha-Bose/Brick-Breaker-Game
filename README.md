@@ -1,11 +1,15 @@
 # Brick Breaker Game in Python using OOPs concepts
 
+![image 1](https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main/ss2.png?raw=true)
+
 ## Overview
 
 - This a terminal-based arcade game in Python3, inspired by the classic brick-breaker game. 
 - The player uses a paddle with a bouncing ball to smash a wall of bricks. 
 - The objective of the game is to break all the bricks as fast as possible. You lose a life when the ball touches the ground below the paddle. 
 - Different sounds are played when different events (like life lost, brick collision, wall collision, laser shoot, etc.) occur.
+
+![image 2](https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main/ss1.png?raw=true)
 
 ## Components
 
@@ -59,6 +63,8 @@
 		- Handles collisions with 3 sides of the walls (except the bottom one).
 		- The reflections are based on the side the ball hits the wall.
 		- The ball is lost when it hits the bottom wall (missing the paddle).
+
+![image 3](https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main/ss3.png?raw=true)
 
 ### Levels
 - 3 levels, with each level having different layouts.
