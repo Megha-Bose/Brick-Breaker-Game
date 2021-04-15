@@ -1,6 +1,6 @@
 # Brick Breaker Game in Python using OOPs concepts
 
-![image 1](https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main/ss2.png?raw=true)
+
 
 ## Overview
 
@@ -9,7 +9,9 @@
 - The objective of the game is to break all the bricks as fast as possible. You lose a life when the ball touches the ground below the paddle. 
 - Different sounds are played when different events (like life lost, brick collision, wall collision, laser shoot, etc.) occur.
 
-![image 2](https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main/ss1.png?raw=true)
+<p align="center">
+  <img src="https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main/screenshots/ss2.png?raw=true" width="350" alt="image 1">
+</p>
 
 ## Components
 
@@ -44,6 +46,10 @@
 - `n` : Move to next level
 - `q` : quit game
 
+<p align="center">
+  <img src="https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main//screenshots/ss1.png?raw=true" width="350" alt="image 2">
+</p>
+
 ## Details
 
 ### Startup
@@ -64,7 +70,9 @@
 		- The reflections are based on the side the ball hits the wall.
 		- The ball is lost when it hits the bottom wall (missing the paddle).
 
-![image 3](https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main/ss3.png?raw=true)
+<p align="center">
+  <img src="https://github.com/Megha-Bose/Brick-Breaker-Game/blob/main//screenshots/ss3.png?raw=true" width="350" alt="image 3">
+</p>
 
 ### Levels
 - 3 levels, with each level having different layouts.
